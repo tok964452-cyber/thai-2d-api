@@ -1,35 +1,44 @@
 const express = require('express');
-const axios = require('axios');
-const cheerio = require('cheerio');
 const app = express();
+app.use(express.json()); // JSON data လက်ခံနိုင်ရန်
 const PORT = process.env.PORT || 3000;
 
-app.get('/api/2d', async (req, res) => {
-    try {
-        const response = await axios.get('https://set.or.th', {
-            headers: { 'User-Agent': 'Mozilla/5.0' }
-        });
-        
-        const $ = cheerio.load(response.data);
-        
-        let setIndex = $('.market-index-value').first().text().trim() || "1380.45";
-        let value = $('.market-value-class').first().text().trim() || "42500.20";
+// နမူနာ ကိုယ်ပိုင် ဒေတာဘေ့စ် (မန်မိုရီထဲတွင် ယာယီသိမ်းဆည်းထားမည်)
+let my2DDatabase = {
+    set: "1420.55",
+    value: "52400.62",
+    twod: "52",
+    status: "live", // live သို့မဟုတ် closed စသည်ဖြင့် ပြောင်းနိုင်သည်
+    last_updated: new Date().toLocaleTimeString()
+};
 
-        const setLastDigit = setIndex.charAt(setIndex.length - 1);
-        const valueLastDigit = value.charAt(value.length - 1);
-        const live2D = `${setLastDigit}${valueLastDigit}`;
-
-        res.json({
-            success: true,
-            set: setIndex,
-            value: value,
-            twod: live2D,
-            time: new Date().toLocaleTimeString()
-        });
-
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
+// ၁။ Sketchware ကနေ ဂဏန်းတွေ လှမ်းဖတ်မယ့် လမ်းကြောင်း (GET Method)
+app.get('/api/2d', (req, res) => {
+    res.json({
+        success: true,
+        source: "My Personal Custom API",
+        data: my2DDatabase
+    });
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// ၂။ မိမိစိတ်ကြိုက် ဂဏန်းအသစ်တွေကို ဖုန်းကနေ လှမ်းပြင်မယ့် လမ်းကြောင်း (POST Method)
+// (ဤနေရာတွင် ဒေတာပြင်ဆင်ရန် Postman app သို့မဟုတ် နောက်ထပ် Sketchware Admin App တစ်ခု သုံးနိုင်သည်)
+app.post('/api/2d/update', (req, res) => {
+    const { set, value, twod, status } = req.body;
+
+    if (set) my2DDatabase.set = set;
+    if (value) my2DDatabase.value = value;
+    if (twod) my2DDatabase.twod = twod;
+    if (status) my2DDatabase.status = status;
+    
+    my2DDatabase.last_updated = new Date().toLocaleTimeString();
+
+    res.json({
+        success: true,
+        message: "ဒေတာများကို အောင်မြင်စွာ ပြင်ဆင်ပြီးပါပြီ။",
+        updated_data: my2DDatabase
+    });
+});
+
+app.listen(PORT, () => console.log(`Custom Live API running on port ${PORT}`));
+
