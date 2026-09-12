@@ -98,7 +98,7 @@
             margin-bottom: 4px;
         }
         .col-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
         }
         .col-value-lg {
@@ -107,7 +107,7 @@
             color: #ffeb3b;
         }
 
-        /* Modern, Internet, TW ဇယားပုံစံ */
+        /* Modern, Internet ဇယားပုံစံ */
         .modern-row {
             display: flex;
             justify-content: space-between;
@@ -150,90 +150,64 @@
     <div class="main-container">
         <!-- Live ဂဏန်းပြ ကတ် -->
         <div class="live-card">
-            <div class="live-number" id="live-twod">63</div>
+            <div class="live-number" id="live-twod">--</div>
             <div class="update-time">
-                <span>🕒</span> <span id="live-time">Updated: 2026-06-04 14:04:05</span>
+                <span>🕒</span> <span id="live-time">Updated: --</span>
             </div>
         </div>
 
-        <!-- 12:01 PM ဇယားကွက် -->
-        <div class="red-card">
-            <div class="time-header">12:01 PM</div>
-            <hr class="divider">
-            <div class="set-val-row">
-                <div class="col">
-                    <div class="col-label">SET</div>
-                    <div class="col-value">1,600.60</div>
-                </div>
-                <div class="col">
-                    <div class="col-label">Value</div>
-                    <div class="col-value">54,502.89</div>
-                </div>
-                <div class="col">
-                    <div class="col-label">2D</div>
-                    <div class="col-value-lg">02</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4:30 PM ဇယားကွက် -->
-        <div class="red-card">
-            <div class="time-header">4:30 PM</div>
-            <hr class="divider">
-            <div class="set-val-row">
-                <div class="col">
-                    <div class="col-label">SET</div>
-                    <div class="col-value">1,604.06</div>
-                </div>
-                <div class="col">
-                    <div class="col-label">Value</div>
-                    <div class="col-value">62,723.17</div>
-                </div>
-                <div class="col">
-                    <div class="col-label">2D</div>
-                    <div class="col-value-lg">--</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9:30 AM Modern / Internet / TW ကွက် -->
-        <div class="red-card">
-            <div class="modern-row">
-                <div class="mod-time">9:30<br><span style="font-size: 12px;">AM</span></div>
-                <div class="mod-values-container">
-                    <div>
-                        <div class="mod-box-label">Modern</div>
-                        <div class="mod-box-val">28</div>
-                    </div>
-                    <div>
-                        <div class="mod-box-label">Internet</div>
-                        <div class="mod-box-val">00</div>
-                    </div>
-                    <div>
-                        <div class="mod-box-label">TW</div>
-                        <div class="mod-box-val">68</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2:00 PM Modern / Internet ကွက် -->
-        <div class="red-card">
-            <div class="modern-row">
-                <div class="mod-time">2:00 PM</div>
-                <div class="mod-values-container" style="gap: 40px;">
-                    <div>
-                        <div class="mod-box-label">Modern</div>
-                        <div class="mod-box-val">07</div>
-                    </div>
-                    <div>
-                        <div class="mod-box-label">Internet</div>
-                        <div class="mod-box-val">09</div>
-                    </div>
-                </div>
-            </div>
+        <!-- တိုက်ရိုက် API ဒေတာများ ဝင်ရောက်မည့် နေရာ -->
+        <div id="dynamic-results-container">
+            <div style="text-align: center; color: #666; padding: 20px;">ဒေတာများကို ဆွဲယူနေပါပြီ...</div>
         </div>
     </div>
+
+    <script>
+        // API ကနေ ဒေတာ လှမ်းယူပြီး UI မှာ ဖြည့်သွင်းခြင်း
+        fetch('/2d_result')
+            .then(response => response.json())
+            .then(data => {
+                // ၁။ Live ဂဏန်းနှင့် အချိန်ကို ထည့်သွင်းခြင်း
+                if (data.live) {
+                    document.getElementById('live-twod').innerText = data.live.twod || '--';
+                    document.getElementById('live-time').innerText = `Updated: ${data.live.time || '--'}`;
+                }
+
+                // ၂။ ရလဒ်ဇယားကွက်များကို ဖန်တီးခြင်း
+                const container = document.getElementById('dynamic-results-container');
+                container.innerHTML = '';
+                
+                let results = Array.isArray(data) ? data : (data.result || []);
+
+                results.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'red-card';
+                    card.innerHTML = `
+                        <div class="time-header">${item.open_time || ''}</div>
+                        <hr class="divider">
+                        <div class="set-val-row">
+                            <div class="col">
+                                <div class="col-label">SET</div>
+                                <div class="col-value">${item.set || '--'}</div>
+                            </div>
+                            <div class="col">
+                                <div class="col-label">Value</div>
+                                <div class="col-value">${item.value || '--'}</div>
+                            </div>
+                            <div class="col">
+                                <div class="col-label">2D</div>
+                                <div class="col-value-lg">${item.twod || '--'}</div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('dynamic-results-container').innerHTML = '<div style="text-align: center; color: red;">ဒေတာ ဆွဲယူ၍မရပါ။</div>';
+            });
+    </script>
 
 </body>
 </html>
