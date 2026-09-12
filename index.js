@@ -7,7 +7,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// မူလ ပထမဆုံး တောင်းဆိုထားသော စံသတ်မှတ်ချက် API ပုံစံ (Data Structure)
+// မူလ API Data Structure
 let apiData = {
   "live": {
     "set": "1,626.27",
@@ -43,9 +43,99 @@ let apiData = {
   ]
 };
 
-// Home Route
+// Root (/) ဝင်လိုက်တာနဲ့ Card / Table ပုံစံ Web Page ပေါ်လာစေရန်
 app.get('/', (req, res) => {
-    res.send("Thai 2D/3D API Server is Running.");
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="my">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Thai 2D Results</title>
+            <style>
+                body {
+                    background-color: #121214;
+                    color: #fff;
+                    font-family: sans-serif;
+                    padding: 15px;
+                }
+                .card {
+                    background-color: #1e1e24;
+                    border-radius: 12px;
+                    padding: 15px;
+                    margin-bottom: 15px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+                    max-width: 500px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                h3 {
+                    margin-top: 0;
+                    color: #ffbc00;
+                }
+                .time-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #2a2a35;
+                    padding-bottom: 12px;
+                    margin-bottom: 12px;
+                }
+                .time-row:last-child {
+                    border-bottom: none;
+                    margin-bottom: 0;
+                    padding-bottom: 0;
+                }
+                .time {
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+                .details {
+                    font-size: 13px;
+                    color: #a0a0b0;
+                    margin-top: 4px;
+                }
+                .twod-number {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #ffbc00;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <h3>2D ရလဒ်များ</h3>
+                <div id="result-container">ဒေတာများကို ဆွဲယူနေပါပြီ...</div>
+            </div>
+
+            <script>
+                fetch('/2d_result')
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.getElementById('result-container');
+                        container.innerHTML = '';
+                        let results = Array.isArray(data) ? data[0].child : data.result;
+
+                        results.forEach(item => {
+                            const row = document.createElement('div');
+                            row.className = 'time-row';
+                            row.innerHTML = \`
+                                <div>
+                                    <div class="time">\${item.open_time}</div>
+                                    <div class="details">ထိပ်စီး: \${item.set} &nbsp; နောက်ပိတ်: \${item.value}</div>
+                                </div>
+                                <div class="twod-number">\${item.twod}</div>
+                            \`;
+                            container.appendChild(row);
+                        });
+                    })
+                    .catch(error => {
+                        document.getElementById('result-container').innerHTML = 'ဒေတာ ဆွဲယူ၍မရပါ။';
+                    });
+            </script>
+        </body>
+        </html>
+    `);
 });
 
 // 1. Daily Live API
@@ -53,7 +143,7 @@ app.get('/live', (req, res) => {
     res.json(apiData);
 });
 
-// 2. 2D Result API (Last 10 days or by date)
+// 2. 2D Result API
 app.get('/2d_result', (req, res) => {
     const { date } = req.query;
     if (date) {
@@ -90,7 +180,7 @@ app.get('/2d_history', (req, res) => {
     ]);
 });
 
-// 4. History of 2D API by date
+// 4. History API
 app.get('/history', (req, res) => {
     const { date } = req.query;
     res.json([
