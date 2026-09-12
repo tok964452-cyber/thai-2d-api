@@ -55,13 +55,12 @@
     </div>
 
     <script>
-        fetch('https://thai-2d-api.onrender.com/2d_result')
+        fetch('/2d_result')
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('result-container');
                 container.innerHTML = '';
                 
-                // API structure ပေါ်မူတည်၍ result array ကို ယူခြင်း
                 let results = Array.isArray(data) ? data[0].child : data.result;
 
                 results.forEach(item => {
