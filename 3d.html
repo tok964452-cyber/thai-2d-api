@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MK2D3DLive - 3D Results</title>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        /* ထိပ်ဆုံး ခေါင်းစဉ်နှင့် ပြန်သွားရန် ခလုတ် */
+        .header-card {
+            background-color: #161b28;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #1f2638;
+        }
+        .app-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 15px;
+        }
+        .back-btn {
+            display: inline-block;
+            background-color: #283559;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        
+        /* 3D ပြကွက် ကတ်ပြား */
+        .threed-card {
+            background-color: #161b28;
+            border: 1px solid #283559;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .threed-title {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        .threed-number {
+            font-size: 60px;
+            font-weight: bold;
+            color: #00e676;
+            letter-spacing: 4px;
+            margin: 15px 0;
+        }
+        .threed-date {
+            font-size: 13px;
+            color: #38bdf8;
+        }
+
+        /* ရက်စွဲရွေးချယ်ရန် input */
+        .date-input-group {
+            margin-top: 15px;
+        }
+        .date-input-group label {
+            font-size: 12px;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .date-input-group input {
+            background-color: #0b0f19;
+            border: 1px solid #38bdf8;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 80%;
+            text-align: center;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header & Navigation -->
+        <div class="header-card">
+            <a href="index.html" class="back-btn">← ပင်မစာမျက်နှာသို့</a>
+            <div class="app-title">MK2D3DLive - 3D ရလဒ်များ</div>
+            
+            <div class="date-input-group">
+                <label>ရက်စွဲအလိုက် 3D ရှာရန်</label>
+                <input type="date" id="threed-date" onchange="fetch3DByDate(this.value)">
+            </div>
+        </div>
+
+        <!-- 3D ပြသသည့် ကတ်ပြား -->
+        <div class="threed-card">
+            <div class="threed-title">ထိုင်း 3D ထွက်ဂဏန်း</div>
+            <div class="threed-number" id="threed-val">---</div>
+            <div class="threed-date" id="threed-time">ရက်စွဲ: --</div>
+        </div>
+
+        <div class="footer-text">This data is referenced from official sources</div>
+    </div>
+
+    <script>
+        // 3D ဒေတာများကို API မှ ဆွဲယူသည့် Function
+        function fetch3DData(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Backend က ပို့ပေးမယ့် 3D JSON ပုံစံအပေါ် မူတည်၍ ဖမ်းယူခြင်း (ဥပမာ - data.threed သို့မဟုတ် data.result)
+                    let threedVal = data.threed || data.result || '---';
+                    let threedTime = data.date || data.time || 'ယနေ့';
+
+                    document.getElementById('threed-val').innerText = threedVal;
+                    document.getElementById('threed-time').innerText = `ရက်စွဲ: ${threedTime}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching 3D data:', error);
+                    document.getElementById('threed-val').innerText = 'Error';
+                });
+        }
+
+        // ပထမအကြိမ် ဝင်လာလျှင် လက်ရှိ 3D ကို ဆွဲယူရန် (API လမ်းကြောင်းကို လိုသလိုပြင်နိုင်သည်)
+        fetch3DData('/3d_result');
+
+        // ရက်စွဲရွေးချယ်လိုက်သည့်အခါ
+        function fetch3DByDate(selectedDate) {
+            if (!selectedDate) return;
+            // ရက်စွဲအလိုက် API တောင်းခံရန် (ဥပမာ - /3d_result?date=2026-09-12)
+            fetch3DData(`/3d_result?date=${selectedDate}`);
+        }
+    </script>
+
+</body>
+</html>
+
