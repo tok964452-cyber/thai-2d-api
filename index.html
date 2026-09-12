@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThaiStock 2D</title>
+    <title>MK2D3DLive</title>
     <style>
         body {
             background-color: #0b0f19;
@@ -50,7 +50,7 @@
             color: #2ecc71;
         }
 
-        /* အချိန်အလိုက် ရလဒ်ဇယားကွက်များ (ဗီဒီယိုပါ ပုံစံအတိုင်း) */
+        /* 12:01 PM / 4:30 PM ဇယားကွက်များ */
         .time-card {
             background-color: #161b28;
             border: 1px solid #283559;
@@ -64,7 +64,6 @@
             color: #38bdf8;
             margin-bottom: 10px;
             text-align: center;
-            letter-spacing: 0.5px;
         }
         .row-details {
             display: flex;
@@ -87,7 +86,7 @@
             color: #fbbf24;
         }
 
-        /* 9:30 AM / 2:00 PM ကဲ့သို့ Modern/Internet ပုံစံအတွက် */
+        /* 9:30 AM / 2:00 PM Modern / Internet ဇယားကွက်များ */
         .modern-card {
             background-color: #161b28;
             border: 1px solid #283559;
@@ -105,7 +104,7 @@
         }
         .mod-values {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             text-align: center;
         }
         .mod-box div:first-child {
@@ -172,7 +171,7 @@
     </div>
 
     <script>
-        // သင့်ရဲ့ API (`/2d_result`) မှ ဒေတာများကို ယူဆောင်လာခြင်း
+        // သင့်ရဲ့ API (`/2d_result`) မှ ဒေတာများကို လှမ်းယူခြင်း
         fetch('/2d_result')
             .then(response => response.json())
             .then(data => {
@@ -182,31 +181,53 @@
                     document.getElementById('live-time').innerText = `✓ Updated: ${data.live.time || '--'}`;
                 }
 
-                // ၂။ API ထဲပါသည့် အချိန်ဇယားများအလိုက် Card များကို အလိုအလျောက် ဖန်တီးခြင်း
+                // ၂။ အချိန်ဇယားကွက်များကို ခွဲခြားဖန်တီးခြင်း
                 const container = document.getElementById('results-container');
                 container.innerHTML = '';
                 
-                let results = Array.isArray(data) ? data : (data.result || []);
+                let results = Array.isArray(data) ? data : (data.result || data);
+                if (!Array.isArray(results) && data[0] && data[0].child) {
+                    results = data[0].child;
+                }
 
                 results.forEach(item => {
+                    const timeStr = item.open_time || '';
                     const card = document.createElement('div');
-                    
-                    // API ထဲပါသော open_time (ဥပမာ- 12:01 PM, 04:30 PM စသည်) အတိုင်း အလိုအလျောက် ပေါ်မည်
-                    card.className = 'time-card';
-                    card.innerHTML = `
-                        <div class="time-title">${item.open_time || ''}</div>
-                        <div class="row-details">
-                            <div class="data-group">
-                                <div>Set</div>
-                                <div>${item.set || '--'}</div>
+
+                    // 9:30 AM နှင့် 2:00 PM အတွက် Modern / Internet ပုံစံထုတ်ပေးခြင်း
+                    if (timeStr.includes('9:30') || timeStr.includes('2:00')) {
+                        card.className = 'modern-card';
+                        card.innerHTML = `
+                            <div class="mod-time">${timeStr}</div>
+                            <div class="mod-values">
+                                <div class="mod-box">
+                                    <div>Modern</div>
+                                    <div>${item.modern || item.set || '--'}</div>
+                                </div>
+                                <div class="mod-box">
+                                    <div>Internet</div>
+                                    <div>${item.internet || item.value || '--'}</div>
+                                </div>
                             </div>
-                            <div class="data-group">
-                                <div>Value</div>
-                                <div>${item.value || '--'}</div>
+                        `;
+                    } else {
+                        // ကျန်အချိန်များအတွက် Set / Value / 2D ပုံစံထုတ်ပေးခြင်း
+                        card.className = 'time-card';
+                        card.innerHTML = `
+                            <div class="time-title">${timeStr}</div>
+                            <div class="row-details">
+                                <div class="data-group">
+                                    <div>Set</div>
+                                    <div>${item.set || '--'}</div>
+                                </div>
+                                <div class="data-group">
+                                    <div>Value</div>
+                                    <div>${item.value || '--'}</div>
+                                </div>
+                                <div class="twod-val">${item.twod || '--'}</div>
                             </div>
-                            <div class="twod-val">${item.twod || '--'}</div>
-                        </div>
-                    `;
+                        `;
+                    }
                     container.appendChild(card);
                 });
             })
