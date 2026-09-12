@@ -50,7 +50,7 @@
             color: #2ecc71;
         }
 
-        /* 12:01 PM / 4:30 PM ဇယားကွက်များ */
+        /* 12:01 PM / 4:30 PM ဇယားကွက်များ (Set, Value ပါဝင်သော ပုံစံ) */
         .time-card {
             background-color: #161b28;
             border: 1px solid #283559;
@@ -237,11 +237,11 @@
                     document.getElementById('live-time').innerText = `✓ Updated: ${data.live.time || '--'}`;
                 }
 
-                // ၂။ အချက်အလက်များကို array ပုံစံဖြင့် ဖြည့်သွင်းခြင်း
+                // ၂။ အချိန်ဇယားများအလိုက် API ဒေတာများကို ဖြည့်သွင်းခြင်း
                 let results = Array.isArray(data) ? data : (data.result || data.child || []);
                 
                 results.forEach(item => {
-                    let time = item.open_time || item.time || '';
+                    let time = (item.open_time || item.time || '').toLowerCase();
                     
                     if (time.includes('9:30')) {
                         document.getElementById('m-930').innerText = item.modern || item.set || '--';
@@ -250,10 +250,10 @@
                         document.getElementById('set-1201').innerText = item.set || '--';
                         document.getElementById('val-1201').innerText = item.value || '--';
                         document.getElementById('2d-1201').innerText = item.twod || '--';
-                    } else if (time.includes('2:00')) {
+                    } else if (time.includes('2:00') || time.includes('02:00')) {
                         document.getElementById('m-1400').innerText = item.modern || item.set || '--';
                         document.getElementById('i-1400').innerText = item.internet || item.value || '--';
-                    } else if (time.includes('4:30')) {
+                    } else if (time.includes('4:30') || time.includes('04:30')) {
                         document.getElementById('set-1630').innerText = item.set || '--';
                         document.getElementById('val-1630').innerText = item.value || '--';
                         document.getElementById('2d-1630').innerText = item.twod || '--';
@@ -267,4 +267,3 @@
 
 </body>
 </html>
-
