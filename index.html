@@ -3,180 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thai 2D Results</title>
+    <title>Myanmar 2D</title>
     <style>
         body {
-            background-color: #121214;
-            color: #fff;
+            background-color: #f2f2f7;
+            color: #333;
             font-family: sans-serif;
-            padding: 15px;
             margin: 0;
+            padding: 0;
         }
-        .header-card {
-            background-color: #1e1e24;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        .live-number {
-            font-size: 56px;
-            font-weight: bold;
-            color: #ffffff;
-            margin: 10px 0;
-        }
-        .update-time {
-            font-size: 13px;
-            color: #00d26a;
-        }
-        .card {
-            background-color: #1e1e24;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        .card-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #e0e0e0;
-        }
-        .time-row {
+        /* ထိပ်ဆုံး အဝါရောင် Header */
+        .top-header {
+            background-color: #ffd700;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #2b2b36;
+            font-weight: bold;
+            color: #000;
+        }
+        .app-title {
+            font-size: 18px;
+        }
+        .header-icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .main-container {
+            padding: 15px;
+        }
+
+        /* အစိမ်းရောင် ဂဏန်းကြီးပြကွက် */
+        .live-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .live-number {
+            font-size: 64px;
+            font-weight: bold;
+            color: #2ecc71;
+            margin: 5px 0;
+            letter-spacing: 2px;
+        }
+        .update-time {
+            font-size: 13px;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* အနီရောင် ဇယားကွက် ကတ်များ */
+        .red-card {
+            background-color: #ff473a;
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 10px;
-        }
-        .time-row:last-child {
-            margin-bottom: 0;
-        }
-        .time-label {
-            font-size: 15px;
-            font-weight: bold;
+            margin-bottom: 12px;
             color: #ffffff;
-            margin-bottom: 6px;
+            box-shadow: 0 4px 6px rgba(255, 71, 58, 0.2);
         }
-        .details {
-            font-size: 12px;
-            color: #a0a0b0;
-        }
-        .twod-number {
-            font-size: 24px;
+        .time-header {
+            text-align: center;
+            font-size: 18px;
             font-weight: bold;
-            color: #ffbc00;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 8px 0 12px 0;
+        }
+        
+        /* Set နှင့် Value ဇယားပုံစံ */
+        .set-val-row {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+        .col {
+            flex: 1;
+        }
+        .col-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 4px;
+        }
+        .col-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .col-value-lg {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        /* Modern, Internet, TW ဇယားပုံစံ */
         .modern-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #2b2b36;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
         }
-        .modern-values {
+        .mod-time {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .mod-values-container {
             display: flex;
             gap: 25px;
             text-align: center;
         }
-        .m-val-box div:first-child {
+        .mod-box-label {
             font-size: 11px;
-            color: #a0a0b0;
-            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2px;
         }
-        .m-val-box div:last-child {
-            font-size: 20px;
+        .mod-box-val {
+            font-size: 18px;
             font-weight: bold;
-            color: #00e676;
+            color: #ffeb3b;
         }
     </style>
 </head>
 <body>
 
-    <!-- ထိပ်ဆုံး Live 2D ဂဏန်းပြ ကတ် -->
-    <div class="header-card" id="header-section">
-        <div class="update-time" id="live-time">✓ Updated: --</div>
-        <div class="live-number" id="live-twod">--</div>
-    </div>
-
-    <!-- 2D ရလဒ်များ (Set / Value / Time) -->
-    <div class="card">
-        <div class="card-title">2D ရလဒ်များ</div>
-        <div id="result-container">ဒေတာများကို ဆွဲယူနေပါပြီ...</div>
-    </div>
-
-    <!-- မော်ဒန် / အင်တန် ကတ် -->
-    <div class="card">
-        <div class="card-title">မော်ဒန် / အင်တန်ကွက်</div>
-        <div class="modern-row">
-            <div>
-                <div class="time-label">09:30 AM</div>
-            </div>
-            <div class="modern-values">
-                <div class="m-val-box">
-                    <div>မော်ဒန်</div>
-                    <div>75</div>
-                </div>
-                <div class="m-val-box">
-                    <div>အင်တန်ကွက်</div>
-                    <div>56</div>
-                </div>
-            </div>
-        </div>
-        <div class="modern-row">
-            <div>
-                <div class="time-label">02:00 PM</div>
-            </div>
-            <div class="modern-values">
-                <div class="m-val-box">
-                    <div>မော်ဒန်</div>
-                    <div>59</div>
-                </div>
-                <div class="m-val-box">
-                    <div>အင်တန်ကွက်</div>
-                    <div>98</div>
-                </div>
-            </div>
+    <!-- ထိပ်ဆုံး အဝါရောင်ဘား -->
+    <div class="top-header">
+        <div class="app-title">Myanmar 2D</div>
+        <div class="header-icons">
+            <span>2D</span>
+            <span>3D</span>
+            <span>📅</span>
+            <span>⋮</span>
         </div>
     </div>
 
-    <script>
-        fetch('/2d_result')
-            .then(response => response.json())
-            .then(data => {
-                // Live အချက်အလက်များကို ထည့်သွင်းခြင်း
-                if (data.live) {
-                    document.getElementById('live-twod').innerText = data.live.twod;
-                    document.getElementById('live-time').innerText = `✓ Updated: ${data.live.time}`;
-                }
+    <div class="main-container">
+        <!-- Live ဂဏန်းပြ ကတ် -->
+        <div class="live-card">
+            <div class="live-number" id="live-twod">63</div>
+            <div class="update-time">
+                <span>🕒</span> <span id="live-time">Updated: 2026-06-04 14:04:05</span>
+            </div>
+        </div>
 
-                const container = document.getElementById('result-container');
-                container.innerHTML = '';
-                
-                let results = Array.isArray(data) ? data[0].child : data.result;
+        <!-- 12:01 PM ဇယားကွက် -->
+        <div class="red-card">
+            <div class="time-header">12:01 PM</div>
+            <hr class="divider">
+            <div class="set-val-row">
+                <div class="col">
+                    <div class="col-label">SET</div>
+                    <div class="col-value">1,600.60</div>
+                </div>
+                <div class="col">
+                    <div class="col-label">Value</div>
+                    <div class="col-value">54,502.89</div>
+                </div>
+                <div class="col">
+                    <div class="col-label">2D</div>
+                    <div class="col-value-lg">02</div>
+                </div>
+            </div>
+        </div>
 
-                results.forEach(item => {
-                    const row = document.createElement('div');
-                    row.className = 'time-row';
-                    row.innerHTML = `
-                        <div>
-                            <div class="time-label">${item.open_time}</div>
-                            <div class="details">ထိပ်စီး: ${item.set} &nbsp; နောက်ပိတ်: ${item.value}</div>
-                        </div>
-                        <div class="twod-number">${item.twod}</div>
-                    `;
-                    container.appendChild(row);
-                });
-            })
-            .catch(error => {
-                document.getElementById('result-container').innerHTML = 'ဒေတာ ဆွဲယူ၍မရပါ။';
-            });
-    </script>
+        <!-- 4:30 PM ဇယားကွက် -->
+        <div class="red-card">
+            <div class="time-header">4:30 PM</div>
+            <hr class="divider">
+            <div class="set-val-row">
+                <div class="col">
+                    <div class="col-label">SET</div>
+                    <div class="col-value">1,604.06</div>
+                </div>
+                <div class="col">
+                    <div class="col-label">Value</div>
+                    <div class="col-value">62,723.17</div>
+                </div>
+                <div class="col">
+                    <div class="col-label">2D</div>
+                    <div class="col-value-lg">--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9:30 AM Modern / Internet / TW ကွက် -->
+        <div class="red-card">
+            <div class="modern-row">
+                <div class="mod-time">9:30<br><span style="font-size: 12px;">AM</span></div>
+                <div class="mod-values-container">
+                    <div>
+                        <div class="mod-box-label">Modern</div>
+                        <div class="mod-box-val">28</div>
+                    </div>
+                    <div>
+                        <div class="mod-box-label">Internet</div>
+                        <div class="mod-box-val">00</div>
+                    </div>
+                    <div>
+                        <div class="mod-box-label">TW</div>
+                        <div class="mod-box-val">68</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2:00 PM Modern / Internet ကွက် -->
+        <div class="red-card">
+            <div class="modern-row">
+                <div class="mod-time">2:00 PM</div>
+                <div class="mod-values-container" style="gap: 40px;">
+                    <div>
+                        <div class="mod-box-label">Modern</div>
+                        <div class="mod-box-val">07</div>
+                    </div>
+                    <div>
+                        <div class="mod-box-label">Internet</div>
+                        <div class="mod-box-val">09</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
