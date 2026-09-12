@@ -160,3 +160,111 @@
             <div class="update-status" id="live-time">✓ Updated: --</div>
         </div>
 
+        <div id="results-container">
+            <div class="modern-card">
+                <div class="mod-time">09:30 AM</div>
+                <div class="mod-values">
+                    <div class="mod-box">
+                        <div>Modern</div>
+                        <div id="m-930">--</div>
+                    </div>
+                    <div class="mod-box">
+                        <div>Internet</div>
+                        <div id="i-930">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-card">
+                <div class="time-title">12:01 PM</div>
+                <div class="row-details">
+                    <div class="data-group">
+                        <div>Set</div>
+                        <div id="set-1201">--</div>
+                    </div>
+                    <div class="data-group">
+                        <div>Value</div>
+                        <div id="val-1201">--</div>
+                    </div>
+                    <div class="twod-val" id="2d-1201">--</div>
+                </div>
+            </div>
+
+            <div class="modern-card">
+                <div class="mod-time">02:00 PM</div>
+                <div class="mod-values">
+                    <div class="mod-box">
+                        <div>Modern</div>
+                        <div id="m-1400">--</div>
+                    </div>
+                    <div class="mod-box">
+                        <div>Internet</div>
+                        <div id="i-1400">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-card">
+                <div class="time-title">04:30 PM</div>
+                <div class="row-details">
+                    <div class="data-group">
+                        <div>Set</div>
+                        <div id="set-1630">--</div>
+                    </div>
+                    <div class="data-group">
+                        <div>Value</div>
+                        <div id="val-1630">--</div>
+                    </div>
+                    <div class="twod-val" id="2d-1630">--</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="api-btn" onclick="window.location.href='/api-docs'">
+            🔌 API for Developers
+        </button>
+        <div class="footer-text">This data is referenced from official sources</div>
+    </div>
+
+    <script>
+        // API မှ ဒေတာများကို ဆွဲယူခြင်း
+        fetch('/2d_result')
+            .then(response => response.json())
+            .then(data => {
+                // ၁။ Live ဂဏန်းနှင့် အချိန်
+                if (data.live) {
+                    document.getElementById('live-twod').innerText = data.live.twod || '--';
+                    document.getElementById('live-time').innerText = `✓ Updated: ${data.live.time || '--'}`;
+                }
+
+                // ၂။ အချက်အလက်များကို array ပုံစံဖြင့် ဖြည့်သွင်းခြင်း
+                let results = Array.isArray(data) ? data : (data.result || data.child || []);
+                
+                results.forEach(item => {
+                    let time = item.open_time || item.time || '';
+                    
+                    if (time.includes('9:30')) {
+                        document.getElementById('m-930').innerText = item.modern || item.set || '--';
+                        document.getElementById('i-930').innerText = item.internet || item.value || '--';
+                    } else if (time.includes('12:01')) {
+                        document.getElementById('set-1201').innerText = item.set || '--';
+                        document.getElementById('val-1201').innerText = item.value || '--';
+                        document.getElementById('2d-1201').innerText = item.twod || '--';
+                    } else if (time.includes('2:00')) {
+                        document.getElementById('m-1400').innerText = item.modern || item.set || '--';
+                        document.getElementById('i-1400').innerText = item.internet || item.value || '--';
+                    } else if (time.includes('4:30')) {
+                        document.getElementById('set-1630').innerText = item.set || '--';
+                        document.getElementById('val-1630').innerText = item.value || '--';
+                        document.getElementById('2d-1630').innerText = item.twod || '--';
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    </script>
+
+</body>
+</html>
+
