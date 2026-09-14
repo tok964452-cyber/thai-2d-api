@@ -3,274 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK2D3DLive - ရလဒ်ဟောင်းများ</title>
+    <title>MK2D3DLive</title>
     <style>
-        body {
-            background-color: #0b0f19;
-            color: #ffffff;
-            font-family: sans-serif;
-            margin: 0;
-            padding: 15px;
-        }
-        .container {
-            max-width: 450px;
-            margin: 0 auto;
-        }
-        /* ထိပ်ဆုံး ခေါင်းစဉ်နှင့် ပြန်သွားရန် ခလုတ် */
-        .header-card {
-            background-color: #161b28;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid #1f2638;
-        }
-        .app-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #38bdf8;
-            margin-bottom: 15px;
-        }
-        .back-btn {
-            display: inline-block;
-            background-color: #283559;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-        /* ရက်စွဲရွေးချယ်ရန် input */
-        .date-input-group {
-            margin-top: 10px;
-        }
-        .date-input-group label {
-            font-size: 12px;
-            color: #94a3b8;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .date-input-group input {
-            background-color: #0b0f19;
-            border: 1px solid #38bdf8;
-            color: #ffffff;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            width: 80%;
-            text-align: center;
-        }
-
-        /* ဇယားကွက်များအတွက် */
-        .time-card {
-            background-color: #161b28;
-            border: 1px solid #283559;
-            border-radius: 14px;
-            padding: 14px 18px;
-            margin-bottom: 12px;
-        }
-        .time-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #38bdf8;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .row-details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .data-group div:first-child {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-bottom: 3px;
-        }
-        .data-group div:last-child {
-            font-size: 13px;
-            font-weight: 500;
-            color: #e2e8f0;
-        }
-        .twod-val {
-            font-size: 22px;
-            font-weight: bold;
-            color: #fbbf24;
-        }
-
-        /* Modern card အတွက် */
-        .modern-card {
-            background-color: #161b28;
-            border: 1px solid #283559;
-            border-radius: 14px;
-            padding: 14px 18px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .mod-time {
-            font-size: 16px;
-            font-weight: bold;
-            color: #38bdf8;
-        }
-        .mod-values {
-            display: flex;
-            gap: 25px;
-            text-align: center;
-        }
-        .mod-box div:first-child {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-bottom: 3px;
-        }
-        .mod-box div:last-child {
-            font-size: 18px;
-            font-weight: bold;
-            color: #00e676;
-        }
-        .footer-text {
-            text-align: center;
-            font-size: 10px;
-            color: #64748b;
-            margin-top: 15px;
-        }
+        body { background-color: #0b0f19; color: #ffffff; font-family: sans-serif; margin: 0; padding: 15px; }
+        .container { max-width: 450px; margin: 0 auto; }
+        .live-card { background-color: #161b28; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px; border: 1px solid #1f2638; }
+        .live-number { font-size: 55px; font-weight: bold; color: #ffffff; margin: 10px 0; letter-spacing: 2px; }
+        .update-status { font-size: 12px; color: #2ecc71; }
+        .time-card { background-color: #161b28; border: 1px solid #283559; border-radius: 14px; padding: 14px 18px; margin-bottom: 12px; }
+        .time-title { font-size: 16px; font-weight: bold; color: #38bdf8; margin-bottom: 10px; text-align: center; }
+        .row-details { display: flex; justify-content: space-between; align-items: center; }
+        .data-group div:first-child { font-size: 11px; color: #94a3b8; margin-bottom: 3px; }
+        .data-group div:last-child { font-size: 13px; font-weight: 500; color: #e2e8f0; }
+        .twod-val { font-size: 22px; font-weight: bold; color: #fbbf24; }
+        .nav-links { display: flex; justify-content: space-around; margin-top: 20px; }
+        .nav-links a { color: #38bdf8; text-decoration: none; font-size: 14px; background: #161b28; padding: 8px 15px; border-radius: 8px; border: 1px solid #283559; }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <!-- Header & Date Picker -->
-        <div class="header-card">
-            <a href="index.html" class="back-btn">← ပင်မစာမျက်နှာသို့</a>
-            <div class="app-title">MK2D3DLive - ရလဒ်ဟောင်းများ ရှာရန်</div>
-            
-            <div class="date-input-group">
-                <label>လိုချင်သော ရက်စွဲကို ရွေးပါ</label>
-                <input type="date" id="history-date" onchange="fetchHistoryByDate(this.value)">
+        <!-- Live Card -->
+        <div class="live-card">
+            <div style="font-weight:bold;">MK2D3DLive</div>
+            <div class="live-number" id="live-2d">--</div>
+            <div class="update-status" id="live-time">Updated: --</div>
+        </div>
+
+        <!-- 09:30 AM (Modern, Internet) -->
+        <div class="time-card">
+            <div class="time-title">09:30 AM</div>
+            <div class="row-details">
+                <div class="data-group"><div>Modern</div><div id="m-930">--</div></div>
+                <div class="data-group"><div>Internet</div><div id="i-930">--</div></div>
             </div>
         </div>
 
-        <!-- ရလဒ်များပေါ်မည့်နေရာ -->
-        <div id="results-container">
-            <!-- 9:30 AM -->
-            <div class="modern-card">
-                <div class="mod-time">09:30 AM</div>
-                <div class="mod-values">
-                    <div class="mod-box">
-                        <div>Modern</div>
-                        <div id="m-930">--</div>
-                    </div>
-                    <div class="mod-box">
-                        <div>Internet</div>
-                        <div id="i-930">--</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 12:01 PM -->
-            <div class="time-card">
-                <div class="time-title">12:01 PM</div>
-                <div class="row-details">
-                    <div class="data-group">
-                        <div>Set</div>
-                        <div id="set-1201">--</div>
-                    </div>
-                    <div class="data-group">
-                        <div>Value</div>
-                        <div id="val-1201">--</div>
-                    </div>
-                    <div class="twod-val" id="2d-1201">--</div>
-                </div>
-            </div>
-
-            <!-- 2:00 PM -->
-            <div class="modern-card">
-                <div class="mod-time">02:00 PM</div>
-                <div class="mod-values">
-                    <div class="mod-box">
-                        <div>Modern</div>
-                        <div id="m-1400">--</div>
-                    </div>
-                    <div class="mod-box">
-                        <div>Internet</div>
-                        <div id="i-1400">--</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4:30 PM -->
-            <div class="time-card">
-                <div class="time-title">04:30 PM</div>
-                <div class="row-details">
-                    <div class="data-group">
-                        <div>Set</div>
-                        <div id="set-1630">--</div>
-                    </div>
-                    <div class="data-group">
-                        <div>Value</div>
-                        <div id="val-1630">--</div>
-                    </div>
-                    <div class="twod-val" id="2d-1630">--</div>
-                </div>
+        <!-- 12:01 PM (Set, Value, 2D) -->
+        <div class="time-card">
+            <div class="time-title">12:01 PM</div>
+            <div class="row-details">
+                <div class="data-group"><div>Set</div><div id="set-1201">--</div></div>
+                <div class="data-group"><div>Value</div><div id="val-1201">--</div></div>
+                <div class="twod-val" id="2d-1201">--</div>
             </div>
         </div>
 
-        <div class="footer-text">This data is referenced from official sources</div>
+        <!-- 02:00 PM (Modern, Internet) -->
+        <div class="time-card">
+            <div class="time-title">02:00 PM</div>
+            <div class="row-details">
+                <div class="data-group"><div>Modern</div><div id="m-1400">--</div></div>
+                <div class="data-group"><div>Internet</div><div id="i-1400">--</div></div>
+            </div>
+        </div>
+
+        <!-- 04:30 PM (Set, Value, 2D) -->
+        <div class="time-card">
+            <div class="time-title">04:30 PM</div>
+            <div class="row-details">
+                <div class="data-group"><div>Set</div><div id="set-1630">--</div></div>
+                <div class="data-group"><div>Value</div><div id="val-1630">--</div></div>
+                <div class="twod-val" id="2d-1630">--</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-links">
+            <a href="history.html">ရလဒ်ဟောင်းများ</a>
+            <a href="3d.html">3D ရလဒ်များ</a>
+        </div>
     </div>
 
     <script>
-        // ဒေတာရှင်းလင်းရန်
-        function clearHistoryData() {
-            document.getElementById('m-930').innerText = '--';
-            document.getElementById('i-930').innerText = '--';
-            document.getElementById('set-1201').innerText = '--';
-            document.getElementById('val-1201').innerText = '--';
-            document.getElementById('2d-1201').innerText = '--';
-            document.getElementById('m-1400').innerText = '--';
-            document.getElementById('i-1400').innerText = '--';
-            document.getElementById('set-1630').innerText = '--';
-            document.getElementById('val-1630').innerText = '--';
-            document.getElementById('2d-1630').innerText = '--';
-        }
-
-        // ရွေးချယ်လိုက်သော ရက်စွဲအလိုက် API မှ လှမ်းယူခြင်း
-        function fetchHistoryByDate(selectedDate) {
-            if (!selectedDate) return;
-            clearHistoryData();
-
-            // သင့် Backend တွင် ရက်စွဲတောင်းခံသည့် ပုံစံ (ဥပမာ - /2d_result?date=2026-09-12) ကို ချိတ်ဆက်ပေးရပါမည်။
-            fetch(`/2d_result?date=${selectedDate}`)
-                .then(response => response.json())
+        function loadData() {
+            fetch('/live')
+                .then(res => res.json())
                 .then(data => {
-                    let results = Array.isArray(data) ? data : (data.result || data.child || []);
-                    
-                    results.forEach(item => {
-                        let time = (item.open_time || item.time || '').toLowerCase();
-                        
-                        if (time.includes('9:30')) {
-                            document.getElementById('m-930').innerText = item.modern || item.set || '--';
-                            document.getElementById('i-930').innerText = item.internet || item.value || '--';
-                        } else if (time.includes('12:01')) {
-                            document.getElementById('set-1201').innerText = item.set || '--';
-                            document.getElementById('val-1201').innerText = item.value || '--';
-                            document.getElementById('2d-1201').innerText = item.twod || '--';
-                        } else if (time.includes('2:00') || time.includes('02:00')) {
-                            document.getElementById('m-1400').innerText = item.modern || item.set || '--';
-                            document.getElementById('i-1400').innerText = item.internet || item.value || '--';
-                        } else if (time.includes('4:30') || time.includes('04:30')) {
-                            document.getElementById('set-1630').innerText = item.set || '--';
-                            document.getElementById('val-1630').innerText = item.value || '--';
-                            document.getElementById('2d-1630').innerText = item.twod || '--';
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching history data:', error);
+                    // Live Card
+                    document.getElementById('live-2d').innerText = data.live.twod;
+                    document.getElementById('live-time').innerText = `Updated: ${data.live.time}`;
+
+                    // 09:30 AM (Index 0)
+                    document.getElementById('m-930').innerText = data.result[0].modern;
+                    document.getElementById('i-930').innerText = data.result[0].internet;
+
+                    // 12:01 PM (Index 1)
+                    document.getElementById('set-1201').innerText = data.result[1].set;
+                    document.getElementById('val-1201').innerText = data.result[1].value;
+                    document.getElementById('2d-1201').innerText = data.result[1].twod;
+
+                    // 02:00 PM (Index 2)
+                    document.getElementById('m-1400').innerText = data.result[2].modern;
+                    document.getElementById('i-1400').innerText = data.result[2].internet;
+
+                    // 04:30 PM (Index 3)
+                    document.getElementById('set-1630').innerText = data.result[3].set;
+                    document.getElementById('val-1630').innerText = data.result[3].value;
+                    document.getElementById('2d-1630').innerText = data.result[3].twod;
                 });
         }
+        loadData();
+        setInterval(loadData, 10000); // ၁၀ စက္ကန့်တစ်ကြိမ် Web ပေါ်မှာ Auto refresh လုပ်ပေးမည်
     </script>
-
 </body>
 </html>
 
