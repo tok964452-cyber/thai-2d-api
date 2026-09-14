@@ -1,10 +1,27 @@
 {
   "version": 2,
   "builds": [
-    { "src": "index.js", "use": "@vercel/node" }
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "index.js" }
+    {
+      "src": "/live",
+      "dest": "index.js"
+    },
+    {
+      "src": "/2d_result",
+      "dest": "index.js"
+    },
+    {
+      "src": "/update_2d",
+      "dest": "index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "index.js"
+    }
   ]
 }
-
