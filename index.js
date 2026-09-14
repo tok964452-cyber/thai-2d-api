@@ -107,7 +107,5 @@ app.get('/update_2d', (req, res) => {
     res.status(400).send("Invalid request");
 });
 
-// Server Listener
-
 module.exports = app;
 
