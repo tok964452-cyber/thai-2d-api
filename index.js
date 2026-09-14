@@ -131,5 +131,10 @@ app.get('/update_2d', (req, res) => {
 app.get('/live', (req, res) => res.json(apiData));
 app.get('/2d_result', (req, res) => res.json({ "date": new Date().toISOString().slice(0,10), "child": apiData.result }));
 
+// index.js ထဲက app.listen အပေါ်နားမှာ ရှိရမယ့် ကုဒ်များ
+app.get('/', (req, res) => { res.sendFile(__dirname + '/index.html'); });
+app.get('/history.html', (req, res) => { res.sendFile(__dirname + '/history.html'); });
+app.get('/3d.html', (req, res) => { res.sendFile(__dirname + '/3d.html'); });
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
