@@ -75,35 +75,35 @@
     </div>
 
     <script>
-        function loadData() {
-            fetch('/live')
-                .then(res => res.json())
-                .then(data => {
-                    // Live Card
-                    document.getElementById('live-2d').innerText = data.live.twod;
-                    document.getElementById('live-time').innerText = `Updated: ${data.live.time}`;
+        function fetchHistoryByDate(selectedDate) {
+    if (!selectedDate) return;
+    clearHistoryData();
 
-                    // 09:30 AM (Index 0)
-                    document.getElementById('m-930').innerText = data.result[0].modern;
-                    document.getElementById('i-930').innerText = data.result[0].internet;
+    fetch(`/2d_result?date=${selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            let results = data.child || [];
+            
+            // 09:30 AM
+            document.getElementById('m-930').innerText = results[0].modern || '--';
+            document.getElementById('i-930').innerText = results[0].internet || '--';
+            
+            // 12:01 PM
+            document.getElementById('set-1201').innerText = results[1].set || '--';
+            document.getElementById('val-1201').innerText = results[1].value || '--';
+            document.getElementById('2d-1201').innerText = results[1].twod || '--';
+            
+            // 02:00 PM
+            document.getElementById('m-1400').innerText = results[2].modern || '--';
+            document.getElementById('i-1400').innerText = results[2].internet || '--';
+            
+            // 04:30 PM
+            document.getElementById('set-1630').innerText = results[3].set || '--';
+            document.getElementById('val-1630').innerText = results[3].value || '--';
+            document.getElementById('2d-1630').innerText = results[3].twod || '--';
+        });
+}
 
-                    // 12:01 PM (Index 1)
-                    document.getElementById('set-1201').innerText = data.result[1].set;
-                    document.getElementById('val-1201').innerText = data.result[1].value;
-                    document.getElementById('2d-1201').innerText = data.result[1].twod;
-
-                    // 02:00 PM (Index 2)
-                    document.getElementById('m-1400').innerText = data.result[2].modern;
-                    document.getElementById('i-1400').innerText = data.result[2].internet;
-
-                    // 04:30 PM (Index 3)
-                    document.getElementById('set-1630').innerText = data.result[3].set;
-                    document.getElementById('val-1630').innerText = data.result[3].value;
-                    document.getElementById('2d-1630').innerText = data.result[3].twod;
-                });
-        }
-        loadData();
-        setInterval(loadData, 10000); // ၁၀ စက္ကန့်တစ်ကြိမ် Web ပေါ်မှာ Auto refresh လုပ်ပေးမည်
     </script>
 </body>
 </html>
