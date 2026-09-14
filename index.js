@@ -84,6 +84,10 @@ app.get('/update_2d', (req, res) => {
     res.status(400).send("Invalid request");
 });
 
-// Vercel အတွက် အောက်ခြေ listen ကုဒ်ကို ဤသို့ပြောင်းပါ
+// index.js ရဲ့ အောက်ဆုံးနားတွင် ဤသို့ ပြန်ပြောင်းပါ
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 module.exports = app;
+
 
