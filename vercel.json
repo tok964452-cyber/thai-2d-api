@@ -1,24 +1,14 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" }
+  ],
   "routes": [
-    {
-      "src": "/live",
-      "dest": "index.js"
-    },
-    {
-      "src": "/2d_result",
-      "dest": "index.js"
-    },
-    {
-      "src": "/update_2d",
-      "dest": "index.js"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "index.html"
-    }
+    { "src": "/live", "dest": "api/live.js" },
+    { "src": "/2d_result", "dest": "api/2d_result.js" },
+    { "src": "/update_2d", "dest": "api/live.js" },
+    { "src": "/(.*)", "dest": "$1" }
   ]
 }
+
