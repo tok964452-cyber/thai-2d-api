@@ -3,7 +3,17 @@ const cors = require('cors');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const app = express();
-app.use(express.static(__dirname));
+// index.js ရဲ့ အပေါ်ဆုံးနားတွင် အောက်ပါအတိုင်း ပြင်ပါ
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios');
+const cheerio = require('cheerio');
+const path = require('path'); // ဤတစ်ကြောင်း ထည့်ပါ
+const app = express();
+
+// ဤနေရာတွင် __dirname အစား path.join သုံးပြီး HTML များကို လမ်းကြောင်းပေးပါ
+app.use(express.static(path.join(__dirname, '/'))); 
+
 
 app.use(cors());
 app.use(express.json());
